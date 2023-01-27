@@ -1,21 +1,19 @@
-   <script>
-    function parseHttpHeaders(httpHeaders) {
-        return httpHeaders.split("\n")
-         .map(x=>x.split(/: */,2))
-         .filter(x=>x[0])
-         .reduce((ac, x)=>{ac[x[0]] = x[1];return ac;}, {});
-    }
-    var req = new XMLHttpRequest();
-    req.open('HEAD', document.location, false);
-    req.send(null);
-    var headers = parseHttpHeaders(req.getAllResponseHeaders());
-    </script>
+<!DOCTYPE html>
+<title>fetch() all Response Headers</title>
 
-    <script>
-    function here() {
-     document.write(JSON.stringify(headers));
-    }
-    </script>
-
-
-<h3><b><script>here();</script></b></h3>
+<h1>All Response Headers with fetch()</h1>
+<script>
+ var x= "";
+ if(window.fetch)
+    fetch(location, {method:'HEAD'})
+    .then(function(r) {
+       r.headers.forEach(
+          function(Value, Header) { x= x + Header + "\n" + Value + "\n\n"; }
+       );
+    })
+    .then(function() {
+       document.body.appendChild(document.createElement("pre")).textContent= x;
+    });
+ else
+   document.write("This does not work in your browser - no support for fetch API");
+</script>
